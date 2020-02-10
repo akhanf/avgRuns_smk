@@ -1,0 +1,6 @@
+{
+	"bids_dir": "bids",
+	"modality": "anat",
+	"acq": "SPACE",
+	"suffix": "T2w"
+}

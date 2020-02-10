@@ -1,8 +1,4 @@
-bids_dir="../test_data/bids"
-modality="anat"
-acq="SPACE"
-suffix="T2w"
-ext=".nii.gz"
+configfile: "config.json"
 
 SUBJECTS=["sub-P041"]
 
@@ -19,7 +15,7 @@ rule all:
 
 rule grab:
     input:
-        os.path.join(bids_dir,"{subject}",modality,"{subject}_acq-"+acq+"_run-{run}_"+suffix+ext)
+        os.path.join(config["bids_dir"],"{subject}",config["modality"],"{subject}_acq-"+config["acq"]+"_run-{run}_"+config["suffix"]+".nii.gz")
     output:
         "grab/{subject}_{run}.nii.gz"
     shell:
@@ -31,6 +27,8 @@ rule reg:
         moving="grab/{subject}_{run}.nii.gz"
     output:
         "reg/{subject}_{run}_reg.nii.gz"
+    envmodules:
+        "fsl"
     shell:
         "flirt -in {input.moving} -ref {input.fixed} -out {output}"
 
@@ -49,7 +47,10 @@ rule avg:
     output:
         merged=temp("avg/{subject}_4d.nii.gz"),
         avg="avg/{subject}_avg.nii.gz"
+    envmodules:
+        "fsl"
     shell:
         "fslmerge -t {output.merged} {input} && "
         "fslmaths {output.merged} -Tmean {output.avg}"
+
 
