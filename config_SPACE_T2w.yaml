@@ -1,0 +1,7 @@
+bids_dir: "/path/to/bids_dir"
+out_dir: "/path/to/output_dir"
+entities:
+  datatype: anat
+  acq: SPACE
+  suffix: T2w
+
